@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[78]:
+# In[21]:
 
 
 from sklearn import datasets
@@ -18,47 +18,20 @@ print(iris.target)
 print(iris.target_names)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# In[89]:
+# In[22]:
 
 
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=0)
+#X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=0)
 
 
-# In[52]:
+# In[23]:
 
 
 from sklearn.naive_bayes import GaussianNB
-classifier = GaussianNB()
-model = classifier.fit(X_train, y_train)
-targets_predicted = model.predict(X_test)
 
 
-# In[88]:
+# In[24]:
 
 
 def myAccurary(predicted, target):
@@ -69,7 +42,7 @@ def myAccurary(predicted, target):
     return count / len(target) * 100;
 
 
-# In[57]:
+# In[25]:
 
 
 class HardCodedClassifier():
@@ -83,16 +56,35 @@ class HardCodedClassifier():
         
 
 
-# In[84]:
+# In[26]:
 
 
-classifier = HardCodedClassifier()
-model = classifier.fit(X_train, y_train)
-targets_predicted = model.predict(X_test)
+#classifier = HardCodedClassifier()
+#model = classifier.fit(X_train, y_train)
+#targets_predicted = model.predict(X_test)
 
 
-# In[87]:
+# In[32]:
 
 
-print "%.2f" % myAccurary(targets_predicted, y_test), "%"
+def main():
+    dataSet = raw_input("Name of your dataset: ")
+    testSize = raw_input("Enter in a number between 1 and 100 for your test size: ")
+    
+    
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=int(testSize) / 100, random_state=0)
+    
+    classifier = GaussianNB()
+    model = classifier.fit(X_train, y_train)
+    targets_predicted = model.predict(X_test)
+    
+    
+    print "Your test accuracy is ", "%.2f" % myAccurary(targets_predicted, y_test), "%"
+    
+
+
+# In[33]:
+
+
+main()
 
