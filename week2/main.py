@@ -53,15 +53,9 @@ iris = datasets.load_iris()
 #print(iris.target_names)
 
 
-# In[2]:
-
 
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=0)
-#print iris.data
-
-
-# In[3]:
 
 
 def myAccurary(predicted, target):
@@ -72,7 +66,6 @@ def myAccurary(predicted, target):
     return count / len(target) * 100;
 
 
-# In[59]:
 
 
 def main():
@@ -100,7 +93,6 @@ def main():
     print "Based on your input, our prediction is", iris.target_names[_predictions[0]]
 
 
-# In[60]:
 
 
 main()
