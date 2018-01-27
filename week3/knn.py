@@ -4,6 +4,7 @@
 
 
 import numpy as np
+from sklearn.metrics import accuracy_score
 class kNNClassifier():
     """
     This is my own implementation of knn.
@@ -40,4 +41,5 @@ class kNNClassifier():
 
     def get_params(self, deep = False):
         return {'k': self.k}
+
 
