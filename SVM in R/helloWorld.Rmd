@@ -1,0 +1,116 @@
+---
+title: "SVM_1"
+author: "Daniel Dang"
+date: "3/8/2018"
+output: html_document
+---
+
+
+```{r, include = FALSE}
+library(e1071)
+library(readr)
+library(dplyr)
+```
+
+
+
+```{r}
+vowel <- read_csv("vowel.csv")
+letter <- read_csv("letters.csv")
+```
+
+```{r}
+vowel <- vowel %>% subset(select = -c(1:2))
+vowel <- vowel %>% na.omit()
+vowel$Class <- factor(vowel$Class)
+```
+
+
+```{r}
+allRows <- 1:nrow(vowel)
+testRows <- sample(allRows, trunc(length(allRows) * 0.3))
+vowel_test <- vowel[testRows,]
+vowel_train <- vowel[-testRows,]
+```
+
+
+```{r}
+svm_tune <- tune(svm, Class ~.,  kernel = "radial", data=vowel_train, ranges = list(gamma = 2^(-2:2), cost = 2^(2:10)),tunecontrol = tune.control(sampling = "fix"))
+```
+
+```{r}
+summary(svm_tune)
+```
+
+
+```{r}
+print(svm_tune)
+```
+
+
+```{r}
+model <- svm(Class ~ ., data = vowel_train, kernel = "radial", gamma = 0.5, cost = 4)
+```
+
+```{r}
+prediction <- predict(model, vowel_test[,-11])
+```
+
+
+```{r}
+confusionMatrix <- table(pred = prediction, true = vowel_test$Class)
+```
+
+
+```{r}
+agreement <- prediction == vowel_test$Class
+accuracy <- prop.table(table(agreement))
+```
+
+
+
+```{r}
+print(confusionMatrix)
+print(accuracy)
+```
+
+```{r}
+letter$letter <- factor(letter$letter)
+letter_test <- letter[testRows,]
+letter_train <- letter[-testRows,]
+```
+
+
+```{r}
+letter_model <- svm(letter ~ ., data = letter_train, kernel = "radial", gamma = 0.5, cost = 4)
+```
+
+```{r}
+letter_model <- svm(letter ~ ., data = letter_train, kernel = "radial", gamma = 0.4, cost = 10)
+```
+
+```{r}
+letter_model <- svm(letter ~ ., data = letter_train, kernel = "radial", gamma = 0.3, cost = 100)
+```
+
+
+```{r}
+letter_model <- svm(letter ~ ., data = letter_train, kernel = "radial", gamma = 0.2, cost = 80)
+```
+
+
+```{r}
+prediction <- predict(letter_model, letter_test[,-1])
+confusionMatrix <- table(pred = prediction, true = letter_test$letter)
+agreement <- prediction == letter_test$letter
+accuracy <- prop.table(table(agreement))
+print(confusionMatrix)
+print(accuracy)
+```
+
+
+
+```{r}
+svm_tune <- tune(svm, letter ~.,  kernel = "radial", data=letter_train, ranges = list(gamma = 2^(-1:0), cost = (1:2)),tunecontrol = tune.control(sampling = "fix"))
+```
+

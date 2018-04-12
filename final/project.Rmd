@@ -1,0 +1,26 @@
+---
+title: "project"
+author: "Daniel Dang"
+date: "3/23/2018"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+dat <- read_csv("./hcp_data.csv")
+test <- dat %>% select(interview_id, interviewee_id, dispo_id, dispo_text, vantage_text, created) %>% filter(!vantage_text %in% c("PROOFING", "RECURRING", "BEGIN"), year(created) %in% c(2016, 2017)) %>% 
+mutate(completed = case_when(vantage_text == "COMPLETE" ~ 1, TRUE ~ 0), hour = hour(created)) %>% 
+group_by(interviewee_id, dispo_id, completed, hour) %>% 
+filter(row_number(interview_id) == 1) %>% 
+arrange(interviewee_id)
+```
+
+```{r}
+nrow(test)
+```
+
